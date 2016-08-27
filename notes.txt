@@ -1,0 +1,7 @@
+1. create new db called crawlQueue
+2. put page in Pages
+3. put links in crawlQueue
+
+unique constraint: on url, don't put in if already in Pages
+
+this will prevent js from running out of memory

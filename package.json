@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "^0.22.0",
     "pg": "^6.1.0",
     "request-turtle": "0.0.2",
     "sequelize": "^3.24.1"
