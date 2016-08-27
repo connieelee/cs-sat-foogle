@@ -40,6 +40,19 @@ pageSchema = {
 var Page = db.define('page', pageSchema)
 
 
+queueSchema = {
+    url: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+            isUrl: true
+        }
+    }
+}
+
+var Queue = db.define('queue', queueSchema)
+
+
 Page.belongsToMany(Page, { as: 'outboundLinks', through: 'links', foreignKey: 'linker' });
 Page.belongsToMany(Page, { as: 'inboundLinks', through: 'links', foreignKey: 'linkee' });
 
@@ -50,5 +63,6 @@ db.sync({'force': true})
 
 module.exports = {
     Page: Page,
-    Domain: Domain
+    Domain: Domain,
+    Queue: Queue
 }
