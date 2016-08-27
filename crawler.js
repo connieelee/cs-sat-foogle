@@ -7,7 +7,7 @@ const turtle = new RequestTurtle({
   limit: 1000
 }); // limit rate to 300ms. this is the default
 
-let urlsToCrawl = ['https://en.wikipedia.org/wiki/Cheerios?oldformat=true']
+let firstUrl = 'https://en.wikipedia.org/wiki/Cheerios?oldformat=true';
 
 
 function crawlPage(url) {
@@ -31,9 +31,7 @@ function crawlPage(url) {
     pageObj['url'] = fullResponse.request.uri.href
 
     var page = Page.create(pageObj)
-      // var domain = Domain.build(domainObj)
-      // page.addDomain(domain, domainObj)
-      // page.save()
+    var domain = Domain.create(domainObj)
 
     let allA = $('#bodyContent').find('a')
     for (let i = 0; i < allA.length; i++) {
@@ -44,7 +42,7 @@ function crawlPage(url) {
       if (url.slice(0, 6) === '/wiki/') {
         url = 'http://en.wikipedia.org'.concat(url)
       }
-      urlsToCrawl.push(url);
+      crawlPage(url);
     }
   })
     .catch(function(error) {
@@ -55,6 +53,5 @@ function crawlPage(url) {
   //   crawlPage(url)
   // })
 }
-urlsToCrawl.forEach(function(url) {
-  crawlPage(url)
-})
+
+crawlPage(firstUrl);
