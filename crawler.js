@@ -12,26 +12,9 @@ let firstUrl = 'https://en.wikipedia.org/wiki/Cheerios?oldformat=true';
 
 let pagesCrawled = {};
 let domainsRegistered = {};
-let urlQueue = []
-
-function seedQueue() {
-  Queue.findAll({
-    limit: 100
-  }).then(function(links) {
-    let rawQueue = links;
-    urlQueue = rawQueue.map(function(item) {
-      return item.url;
-    })
-    rawQueue.forEach(function(item) {
-      item.destroy();
-    });
-  })
-}
 
 
 function crawlPage(url) {
-
-  if (pagesCrawled[url] !== undefined) return;
 
   turtle.request({
     method: "GET",
@@ -43,21 +26,13 @@ function crawlPage(url) {
 
     let pageObj = {};
 
-    if (domainsRegistered[fullResponse.request.uri.host] === undefined) {
-      domainsRegistered[fullResponse.request.uri.host] = 'something'
-      let domainObj = {
-        name: fullResponse.request.uri.host
-      }
-      var domain = Domain.create(domainObj)
-    }
-
 
     pageObj['status'] = fullResponse.request.responseContent.statusCode;
     pageObj['title'] = $('title').text();
     pageObj['textContent'] = $('body').text()
     pageObj['url'] = fullResponse.request.uri.href
 
-    var page = Page.create(pageObj)
+    Page.create(pageObj)
 
 
     let allA = $('#bodyContent').find('a')
@@ -66,20 +41,12 @@ function crawlPage(url) {
       if (url[0] === '#') {
         continue;
       }
-      if (url.slice(0, 6) === '/wiki/') {
-        url = 'http://en.wikipedia.org'.concat(url)
+      if (url.slice(0, 4) !== 'http') {
+        url = fullResponse.request.uri.host.concat(url)
       }
-      Queue.create({
-        url: url
-      })
+      crawlPage(url)
     }
   })
-    .then(function() {
-      if (urlQueue.length === 0) {
-        setTimeout(seedQueue, 1000);
-      }
-      crawlPage(urlQueue.shift())
-    })
     .catch(function(error) {
       console.log('you fucked up cuz', error)
     });

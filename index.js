@@ -1,6 +1,8 @@
 
 var Sequelize = require('sequelize');
-var db = new Sequelize('postgres://localhost:5432/webcrawler');
+var db = new Sequelize('postgres://localhost:5432/webcrawler', {
+    logging: false
+});
 
 domainSchema = {
     name: {
@@ -43,10 +45,7 @@ var Page = db.define('page', pageSchema)
 queueSchema = {
     url: {
         type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            isUrl: true
-        }
+        allowNull: false
     }
 }
 
