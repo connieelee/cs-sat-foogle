@@ -37,6 +37,9 @@ pageSchema = {
         type: Sequelize.INTEGER,
         allowNull: false
     },
+    topWords: {
+        type: Sequelize.ARRAY(Sequelize.TEXT)
+    }
 }
 
 var Page = db.define('page', pageSchema)
