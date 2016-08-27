@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "pg": "^6.1.0",
+    "request-turtle": "0.0.1",
     "sequelize": "^3.24.1"
   }
 }
