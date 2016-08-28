@@ -16,6 +16,9 @@ let domainsRegistered = {};
 
 function crawlPage(url) {
 
+  console.log(url.slice(0,4))
+  if(url.slice(0,4) !== 'http') return;
+
   turtle.request({
     method: "GET",
     uri: url,
@@ -37,11 +40,11 @@ function crawlPage(url) {
 
     // console.log(words)
 
-    var badWords = ['the', 'and', ' ', 'a', 'an', '', 'by', 'to', 'of', 'is', 'was', 'in', 'The', 'with', 'that', 'on', 'as', 'from', 's', 'edit', 'In', 'var', 'if', 'for', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'function', '0', 'document', 'ext', 'jquery']
+    var badWords = ['the', 'and', ' ', 'a', 'an', '', 'by', 'to', 'of', 'is', 'was', 'in', 'The', 'with', 'that', 'on', 'as', 'from', 's', 'edit', 'In', 'var', 'if', 'for', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'function', '0', 'document', 'ext', 'jquery', 'div', 'jQuery', 'www', ]
 
     for (var i = 0; i < words.length; i++) {
 
-      if (badWords.indexOf(words[i]) === -1) {
+      if (badWords.indexOf(words[i]) === -1 || words[i].lenght < 4) {
 
         wordCounts[words[i]] = (wordCounts[words[i]] || 0) + 1;
       }
@@ -61,14 +64,14 @@ function crawlPage(url) {
 
     let allA = $('#bodyContent').find('a')
     for (let i = 0; i < allA.length; i++) {
-      let url = allA[i].attribs.href
-      if (url[0] === '#') {
+      let newUrl = allA[i].attribs.href
+      if (newUrl[0] === '#') {
         continue;
       }
-      if (url.slice(0, 4) !== 'http') {
-        url = fullResponse.request.uri.host.concat(url)
+      if (newUrl.slice(0, 4) !== 'http') {
+        newUrl = fullResponse.request.uri.host + newUrl
       }
-      crawlPage(url)
+      crawlPage(newUrl)
     }
   })
     .catch(function(error) {
